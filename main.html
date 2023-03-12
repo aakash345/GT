@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Calculate distance using Mapbox and Turf.js</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.5.0/turf.min.js'></script>
+</head>
+  <body>
+    <div id="map" style="width: 100%; height: 500px"></div>
+    <script>
+      // Your JavaScript code goes here
+      mapboxgl.accessToken = "pk.eyJ1Ijoic2t5Z3VwdGEzNDUiLCJhIjoiY2xmNDBuNWkxMHk0dTNvcjAzNWE4dDcxOCJ9.q1NkZ5kMRNjsXklpVFFk8Q";
+
+      // Create a new Mapbox map
+      var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-122.4194, 37.7749], // San Francisco, CA
+            zoom: 12
+        });
+
+        // Define two GeoJSON Point features
+        var point1 = turf.point([-122.4194, 37.7749]); // San Francisco, CA
+        var point2 = turf.point([-73.9352, 40.7306]); // New York, NY
+
+        // Calculate the distance between the two points
+        var distance = turf.distance(point1, point2);
+
+        // Log the distance to the console
+        console.log(distance);
+
+        // Add the two points as markers to the map
+        var geojson = {
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [-122.4194, 37.7749]
+                    },
+                    properties: {
+                        title: 'San Francisco, CA'
+                    }
+                },
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [-73.9352, 40.7306]
+                    },
+                    properties: {
+                        title: 'New York, NY'
+                    }
+                }
+            ]
+        };
+
+        // Add the markers to the map
+        map.on('load', function () {
+            map.addSource('markers', {
+                type: 'geojson',
+                data: geojson
+            });
+
+            map.addLayer({
+                id: 'markers',
+                type: 'symbol',
+                source: 'markers',
+                layout: {
+                    'icon-image': 'circle-15',
+                    'icon-allow-overlap': true,
+                    'text-field': '{title}',
+                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                    'text-offset': [0, 0.6],
+                    'text-anchor': 'top'
+                }
+            });
+        });
+
+        // Display the distance between the two points in a popup
+        var popup = new mapboxgl.Popup()
+            .setLngLat([-122.4194, 37.7749]) // San Francisco, CA
+            .setHTML('<p>Distance to New York, NY: ' + distance.toFixed(2) + ' km</p>')
+            .addTo(map);
+    </script>
+  </body>
+</html>
