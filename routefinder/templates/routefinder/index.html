@@ -200,11 +200,23 @@
                 'source': 'waypoint' + i,
                 'paint': {
                   'circle-color': '#ff0000',
-                  'circle-radius': 10
+                  'circle-radius': 10,
                 }
               });
+            map1.addLayer({
+              'id': 'waypoint' + i + '-label',
+              'type': 'symbol',
+              'source': 'waypoint' + i,
+              'layout': {
+                'text-field': i.toString(),
+                'text-size': 25,
+                'text-offset': [0, -0.5] // Offset the text slightly above the circle
+              },
+              'paint': {
+                'text-color': 'black'
+              }
             });
-
+          });
             // Use the Mapbox Directions API to calculate an optimized route
             var url = 'https://api.mapbox.com/directions/v5/mapbox/driving/' +
               waypoints.join(';') +

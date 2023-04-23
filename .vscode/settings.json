@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/5b367de5-0eeb-4f8b-a7c1-67f5b4122271/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/route-planner-prjt",
+    "appService.deploySubpath": "."
+}
